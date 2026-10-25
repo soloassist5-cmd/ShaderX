@@ -46,3 +46,5 @@ value.OUTSIDE_FLOOR.4=Poolrooms
 value.OUTSIDE_FLOOR.5=Level !
 option.BRIGHTNESS=Яркость
 option.BRIGHTNESS.comment=Меньше - темнее и страшнее.
+option.GLOOM=Мрачность
+option.GLOOM.comment=Затемняет даже освещённые места, лампы остаются яркими. 0 - как без шейдера.

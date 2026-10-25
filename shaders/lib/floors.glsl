@@ -17,6 +17,7 @@ struct FloorLook {
     float grain;
     float vignette;
     float pulse;       // красная тревожная пульсация
+    float gamma;       // >1: темнее даже при свете, лампы остаются яркими
 };
 
 // Вне этажей: нейтральная картинка, только камера
@@ -28,42 +29,42 @@ FloorLook lookOutside() {
 #endif
     return FloorLook(vec3(1.0), 1.0, 1.0, 1.0, vec3(0.0),
                      vec3(0.0), 16.0, 64.0, 0.0,
-                     0.0, 0.25 * cam, 0.4 * cam, 0.5 * cam, 0.35 * cam, 0.0);
+                     0.0, 0.25 * cam, 0.4 * cam, 0.5 * cam, 0.35 * cam, 0.0, 1.0);
 }
 
 // Level 0: бесконечные моно-жёлтые комнаты, гудящие лампы, сырой ковёр
 FloorLook lookLevel0() {
     return FloorLook(vec3(1.10, 1.02, 0.60), 1.15, 1.08, 1.0, vec3(0.020, 0.017, 0.0),
                      vec3(0.20, 0.17, 0.07), 3.0, 36.0, 0.85,
-                     0.6, 0.9, 1.0, 1.0, 0.9, 0.0);
+                     0.6, 0.9, 1.0, 1.0, 0.9, 0.0, 1.8);
 }
 
 // Level 1: холодный бетон, склады, полутьма
 FloorLook lookLevel1() {
     return FloorLook(vec3(0.90, 0.96, 1.02), 0.55, 1.15, 0.85, vec3(0.010, 0.012, 0.016),
                      vec3(0.050, 0.055, 0.060), 4.0, 40.0, 0.85,
-                     0.8, 0.6, 1.0, 1.3, 0.85, 0.0);
+                     0.8, 0.6, 1.0, 1.3, 0.85, 0.0, 1.6);
 }
 
 // Level 2: трубы, ржавчина, тьма сразу за светом
 FloorLook lookLevel2() {
     return FloorLook(vec3(1.06, 0.88, 0.70), 0.70, 1.20, 0.75, vec3(0.010, 0.005, 0.0),
                      vec3(0.020, 0.012, 0.006), 2.0, 24.0, 0.95,
-                     1.0, 0.7, 1.2, 1.5, 1.0, 0.0);
+                     1.0, 0.7, 1.2, 1.5, 1.0, 0.0, 1.8);
 }
 
 // Level 37 (Poolrooms): белая плитка, вода, пересвеченный сон
 FloorLook lookPoolrooms() {
     return FloorLook(vec3(0.92, 1.02, 1.06), 0.80, 0.90, 1.10, vec3(0.04, 0.05, 0.055),
                      vec3(0.80, 0.90, 0.93), 10.0, 80.0, 0.5,
-                     0.0, 1.0, 0.6, 0.6, 0.35, 0.0);
+                     0.0, 1.0, 0.6, 0.6, 0.35, 0.0, 1.15);
 }
 
 // Level ! (Run For Your Life): красный свет, паника
 FloorLook lookRun() {
     return FloorLook(vec3(1.35, 0.32, 0.28), 0.55, 1.30, 0.95, vec3(0.03, 0.0, 0.0),
                      vec3(0.18, 0.0, 0.0), 2.0, 30.0, 0.9,
-                     0.5, 1.2, 2.0, 1.4, 1.2, 1.0);
+                     0.5, 1.2, 2.0, 1.4, 1.2, 1.0, 1.6);
 }
 
 // Стиль там, где камера не попала ни в один диапазон высот
@@ -100,6 +101,7 @@ FloorLook madLook(FloorLook acc, FloorLook l, float w) {
     acc.grain      += l.grain * w;
     acc.vignette   += l.vignette * w;
     acc.pulse      += l.pulse * w;
+    acc.gamma      += l.gamma * w;
     return acc;
 }
 
@@ -135,7 +137,7 @@ FloorLook getLook(float cameraY) {
 
     FloorLook acc = FloorLook(vec3(0.0), 0.0, 0.0, 0.0, vec3(0.0),
                               vec3(0.0), 0.0, 0.0, 0.0,
-                              0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+                              0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     acc = madLook(acc, lookDefault(),   max(1.0 - total, 0.0));
     acc = madLook(acc, lookLevel0(),    w0 * norm);
     acc = madLook(acc, lookLevel1(),    w1 * norm);

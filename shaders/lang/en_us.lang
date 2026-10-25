@@ -46,3 +46,5 @@ value.OUTSIDE_FLOOR.4=Poolrooms
 value.OUTSIDE_FLOOR.5=Level !
 option.BRIGHTNESS=Brightness
 option.BRIGHTNESS.comment=Lower is darker and scarier.
+option.GLOOM=Gloom
+option.GLOOM.comment=Darkens even lit areas while lamps stay bright. 0 = vanilla.
