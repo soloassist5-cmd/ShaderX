@@ -33,9 +33,9 @@ FloorLook lookOutside() {
 
 // Level 0: бесконечные моно-жёлтые комнаты, гудящие лампы, сырой ковёр
 FloorLook lookLevel0() {
-    return FloorLook(vec3(1.10, 1.02, 0.60), 1.15, 1.06, 1.15, vec3(0.035, 0.030, 0.0),
-                     vec3(0.52, 0.47, 0.26), 6.0, 56.0, 0.55,
-                     0.6, 0.9, 1.0, 1.0, 0.6, 0.0);
+    return FloorLook(vec3(1.10, 1.02, 0.60), 1.15, 1.08, 1.0, vec3(0.020, 0.017, 0.0),
+                     vec3(0.20, 0.17, 0.07), 3.0, 36.0, 0.85,
+                     0.6, 0.9, 1.0, 1.0, 0.9, 0.0);
 }
 
 // Level 1: холодный бетон, склады, полутьма
@@ -64,6 +64,23 @@ FloorLook lookRun() {
     return FloorLook(vec3(1.35, 0.32, 0.28), 0.55, 1.30, 0.95, vec3(0.03, 0.0, 0.0),
                      vec3(0.18, 0.0, 0.0), 2.0, 30.0, 0.9,
                      0.5, 1.2, 2.0, 1.4, 1.2, 1.0);
+}
+
+// Стиль там, где камера не попала ни в один диапазон высот
+FloorLook lookDefault() {
+#if OUTSIDE_FLOOR == 1
+    return lookLevel0();
+#elif OUTSIDE_FLOOR == 2
+    return lookLevel1();
+#elif OUTSIDE_FLOOR == 3
+    return lookLevel2();
+#elif OUTSIDE_FLOOR == 4
+    return lookPoolrooms();
+#elif OUTSIDE_FLOOR == 5
+    return lookRun();
+#else
+    return lookOutside();
+#endif
 }
 
 // acc + l * w
@@ -119,7 +136,7 @@ FloorLook getLook(float cameraY) {
     FloorLook acc = FloorLook(vec3(0.0), 0.0, 0.0, 0.0, vec3(0.0),
                               vec3(0.0), 0.0, 0.0, 0.0,
                               0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-    acc = madLook(acc, lookOutside(),   max(1.0 - total, 0.0));
+    acc = madLook(acc, lookDefault(),   max(1.0 - total, 0.0));
     acc = madLook(acc, lookLevel0(),    w0 * norm);
     acc = madLook(acc, lookLevel1(),    w1 * norm);
     acc = madLook(acc, lookLevel2(),    w2 * norm);

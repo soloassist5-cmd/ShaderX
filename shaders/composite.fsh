@@ -47,7 +47,7 @@ void main() {
     graded = (graded - 0.45) * look.contrast + 0.45;
     graded = graded + look.lift * (1.0 - graded);
     graded *= 1.0 - look.pulse * 0.3 * (0.5 + 0.5 * sin(frameTimeCounter * 4.5));
-    color = mix(color, graded, COLOR_GRADING_STRENGTH);
+    color = mix(color, graded, COLOR_GRADING_STRENGTH) * BRIGHTNESS;
 
     /* DRAWBUFFERS:0 */
     gl_FragData[0] = vec4(clamp(color, 0.0, 1.0), 1.0);
